@@ -1,10 +1,11 @@
+import ballerina/docker;
 // import ballerina/docker;
 import ballerina/http;
 import ballerina/io;
 import ballerina/log;
 
 
-// @docker:Expose {}
+@docker:Expose {}
 listener http:Listener marvinEP = new(3300);
 
 
@@ -38,7 +39,7 @@ function sendMessage(@untainted string chatID,@untainted string message) returns
 }
 
 
-// @docker:Config {name: "marvin", tag: "last"}
+@docker:Config {name: "marvin", tag: "v0.1", push: true}
 @http:ServiceConfig {basePath: "/marvin"}
 service marvin on marvinEP {
 
@@ -49,7 +50,6 @@ service marvin on marvinEP {
             http:Response res = new ();
 
             json | error message = <@untainted>data.message;
-
             if (message is error) {
                 res.setJsonPayload({"error": message.toString()});
                 res.statusCode = http:STATUS_BAD_REQUEST;
@@ -72,6 +72,7 @@ service marvin on marvinEP {
                     checkpanic caller->respond(res);
                     return;
                 }
+                chatID = <string> chat;
             }
 
             var err = sendMessage(chatID, <string>message);
