@@ -4,3 +4,4 @@ if ! [ -x "$(command -v native-image)" ]; then
 fi
 
 native-image -jar target/bin/marvin.jar
+mv marvin bin/linux/marvin
