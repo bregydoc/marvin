@@ -1,6 +1,8 @@
+import ballerina/docker;
 import ballerina/http;
 import ballerina/io;
 import ballerina/log;
+
 
 http:Client telegramClient = new ("https://api.telegram.org");
 
@@ -29,8 +31,16 @@ function sendMessage(@untainted string chatID,@untainted string message) returns
     }
 }
 
+@docker:Expose {}
+listener http:Listener marvinEP = new(3300);
+
+@docker:Config {
+    name: "marvin",
+    tag: "lasted"
+}
+
 @http:ServiceConfig {basePath: "/marvin"}
-service marvin on new http:Listener(3300) {
+service marvin on marvinEP {
 
     @http:ResourceConfig {methods: ["POST"], path: "/"}
     resource function emit(http:Caller caller, http:Request req) {
@@ -56,7 +66,7 @@ service marvin on new http:Listener(3300) {
 
             if (chatID == "") {
                 json | error chat = <@untainted>data.chat;
-                if (message is error) {
+                if (chat is error) {
                     res.setJsonPayload({"error": message.toString()});
                     res.statusCode = http:STATUS_BAD_REQUEST;
                     checkpanic caller->respond(res);
