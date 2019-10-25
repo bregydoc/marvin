@@ -1,7 +1,11 @@
-import ballerina/docker;
+// import ballerina/docker;
 import ballerina/http;
 import ballerina/io;
 import ballerina/log;
+
+
+// @docker:Expose {}
+listener http:Listener marvinEP = new(3300);
 
 
 http:Client telegramClient = new ("https://api.telegram.org");
@@ -33,14 +37,8 @@ function sendMessage(@untainted string chatID,@untainted string message) returns
     }
 }
 
-@docker:Expose {}
-listener http:Listener marvinEP = new(3300);
 
-@docker:Config {
-    name: "marvin",
-    tag: "lasted"
-}
-
+// @docker:Config {name: "marvin", tag: "last"}
 @http:ServiceConfig {basePath: "/marvin"}
 service marvin on marvinEP {
 

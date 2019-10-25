@@ -3,5 +3,5 @@ if ! [ -x "$(command -v native-image)" ]; then
   gu install native-image
 fi
 
-native-image -jar target/bin/marvin.jar
+native-image -jar /root/marvin.jar --no-fallback
 mv marvin bin/linux/marvin
