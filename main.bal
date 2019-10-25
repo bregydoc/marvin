@@ -22,6 +22,8 @@ function sendMessage(@untainted string chatID,@untainted string message) returns
 
     string url = string `/bot${<string>apiKey}/sendMessage?chat_id=${chat}&text=${message}`;
     
+    io:println(url);
+
     var response = telegramClient->get(url);
     if (response is http:Response) {
         if (response.statusCode != http:STATUS_OK) {
@@ -101,7 +103,7 @@ public function main(string botAPIKey, string chat = "", string message = "", in
 
     apiKey = <@untainted><string | error>botAPIKey;
 
-    // io:println(string `I'm here with key=${<string>apiKey} and chat=${chat} and message=${message}`);
+    io:println(string `I'm here with key=${<string>apiKey} and chat=${chat} and message=${message}`);
 
     if (chat != "") {
         chatID = <@untainted>chat;

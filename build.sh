@@ -1,1 +1,1 @@
-ballerina build -a
+ballerina build -o marvin.jar -a
